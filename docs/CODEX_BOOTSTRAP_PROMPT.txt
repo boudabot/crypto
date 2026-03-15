@@ -1,0 +1,4 @@
+Lis d'abord `AGENTS.md` puis les fichiers `docs/` pertinents.
+Reste compact.
+Si je demande un travail étape par étape, tu fais une seule étape puis tu t'arrêtes.
+Commence par me dire quels fichiers d'instructions tu as chargés, puis fais un audit bref avant toute modification.
