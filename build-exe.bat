@@ -2,48 +2,46 @@
 setlocal
 cd /d "%~dp0"
 
-for %%I in (javac.exe) do set "JAVAC_CMD=%%~$PATH:I"
-for %%I in (jar.exe) do set "JAR_CMD=%%~$PATH:I"
+where mvn >nul 2>nul
+if errorlevel 1 (
+    echo Maven introuvable dans le PATH.
+    exit /b 1
+)
+
+set "JPACKAGE_CMD="
 for %%I in (jpackage.exe) do set "JPACKAGE_CMD=%%~$PATH:I"
-
-if not defined JAVAC_CMD (
-    echo javac.exe introuvable dans le PATH.
-    exit /b 1
+if not defined JPACKAGE_CMD if defined JAVA_HOME if exist "%JAVA_HOME%\bin\jpackage.exe" set "JPACKAGE_CMD=%JAVA_HOME%\bin\jpackage.exe"
+if not defined JPACKAGE_CMD (
+    for /f "usebackq delims=" %%I in (`powershell -NoProfile -Command "$javaHome = (java -XshowSettings:properties -version 2>&1 | Select-String 'java.home =').ToString().Split('=')[1].Trim(); $candidate = Join-Path $javaHome 'bin\\jpackage.exe'; if (Test-Path $candidate) { Write-Output $candidate }"`) do set "JPACKAGE_CMD=%%I"
 )
-
-if not defined JAR_CMD (
-    echo jar.exe introuvable dans le PATH.
-    exit /b 1
-)
-
 if not defined JPACKAGE_CMD (
     echo jpackage.exe introuvable. Installe un JDK complet ou ajoute son dossier bin au PATH.
     exit /b 1
 )
 
-if exist out rmdir /s /q out
+where candle.exe >nul 2>nul
+if errorlevel 1 (
+    echo WiX Toolset introuvable. Un build .exe Windows via jpackage requiert candle.exe et light.exe dans le PATH.
+    exit /b 1
+)
+
+where light.exe >nul 2>nul
+if errorlevel 1 (
+    echo WiX Toolset introuvable. Un build .exe Windows via jpackage requiert candle.exe et light.exe dans le PATH.
+    exit /b 1
+)
+
 if exist dist rmdir /s /q dist
-mkdir out
 mkdir dist
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "Get-ChildItem -Path 'src/main/java' -Filter '*.java' -Recurse | ForEach-Object { $_.FullName } | Set-Content -Encoding utf8 '.sources'"
-if errorlevel 1 exit /b %errorlevel%
-
-"%JAVAC_CMD%" -encoding UTF-8 -d out @.sources
+call mvn -q -DskipTests package
 if errorlevel 1 (
-    del /q .sources >nul 2>nul
     exit /b %errorlevel%
 )
 
-del /q .sources >nul 2>nul
-> dist\manifest.txt echo Main-Class: com.localbrief.LocalDataBriefApp
-"%JAR_CMD%" cfm dist\local-data-brief.jar dist\manifest.txt -C out .
-if errorlevel 1 exit /b %errorlevel%
-
 "%JPACKAGE_CMD%" ^
   --name "Local Data Brief" ^
-  --input dist ^
+  --input target ^
   --main-jar local-data-brief.jar ^
   --main-class com.localbrief.LocalDataBriefApp ^
   --type exe ^

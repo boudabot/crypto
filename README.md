@@ -12,12 +12,24 @@ V1 locale en Java desktop, gratuite, inspiree d'un tableau de bord de recherche/
 
 ## Lancement
 
+Prerequis:
+- JDK 21
+- Maven 3.9+
+
+Lancement simple:
+
 1. Double-cliquer sur `run.bat`
 
 Ou en ligne de commande:
 
 ```powershell
 .\run.bat
+```
+
+Commande Maven equivalente:
+
+```powershell
+mvn -q -DskipTests exec:java
 ```
 
 ## Packaging Windows
@@ -28,7 +40,24 @@ Si tu veux un executable Windows ensuite:
 .\build-exe.bat
 ```
 
-Le script essaie de produire un `.exe` avec `jpackage` a partir du JDK installe.
+Le script construit d'abord le jar Maven puis essaie de produire un `.exe` avec `jpackage`.
+Prerequis supplementaires pour le `.exe` Windows:
+- `jpackage` disponible via le JDK 21
+- WiX Toolset installe avec `candle.exe` et `light.exe` dans le `PATH`
+
+## Build Maven
+
+Pour compiler et packager le jar:
+
+```powershell
+mvn -q -DskipTests package
+```
+
+Le jar lanceable est genere ici:
+
+```text
+target\local-data-brief.jar
+```
 
 ## Indicateurs inclus
 
