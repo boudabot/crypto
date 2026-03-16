@@ -1,7 +1,7 @@
 package com.localbrief;
 
-import com.localbrief.service.MarketOverviewService;
-import com.localbrief.ui.DashboardFrame;
+import com.localbrief.service.DemoAssetPageService;
+import com.localbrief.ui.AssetPageFrame;
 
 import javax.swing.SwingUtilities;
 
@@ -11,10 +11,9 @@ public final class LocalDataBriefApp {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            DashboardFrame frame = new DashboardFrame(new MarketOverviewService());
+            AssetPageFrame frame = new AssetPageFrame(new DemoAssetPageService());
+            frame.loadPage();
             frame.setVisible(true);
-            frame.loadData();
         });
     }
 }
-
