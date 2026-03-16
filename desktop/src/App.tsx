@@ -1,4 +1,4 @@
-import { mockAssetPage } from "./mockAssetPage";
+import { mockAssetPagePayload } from "./mocks/mockAssetPagePayload";
 import "./App.css";
 
 const chartWidth = 880;
@@ -29,9 +29,9 @@ function buildChartGeometry(values: number[]) {
 }
 
 function App() {
-  const page = mockAssetPage;
-  const geometry = buildChartGeometry(page.chart.map((point) => point.value));
-  const trendClass = page.change24h >= 0 ? "positive" : "negative";
+  const page = mockAssetPagePayload;
+  const geometry = buildChartGeometry(page.timeSeries.points.map((point) => point.value));
+  const trendClass = page.primaryPrice.changePercent >= 0 ? "positive" : "negative";
 
   return (
     <div className="app-shell">
@@ -40,13 +40,15 @@ function App() {
           <span className="eyebrow">Local Data Brief Desktop</span>
           <h1>Modern desktop shell</h1>
           <p>
-            React + TypeScript + Tauri, en mode local et mock, sans backend Java branche pour
-            l&apos;instant.
+            React + TypeScript + Tauri, pilote par un contrat minimal de page actif, sans backend
+            Java branche pour l&apos;instant.
           </p>
         </div>
         <div className="status-stack">
-          <span className="pill">{page.shellLabel}</span>
-          <span className="muted-copy">Branche actuelle: frontend shell only</span>
+          <span className="pill">{page.meta.mode}</span>
+          <span className="muted-copy">
+            {page.meta.source} • {page.meta.asOf}
+          </span>
         </div>
       </header>
 
@@ -55,19 +57,19 @@ function App() {
           <article className="panel hero-panel">
             <div className="asset-header">
               <div>
-                <span className="asset-type">Crypto</span>
+                <span className="asset-type">{page.asset.type}</span>
                 <h2>
-                  {page.symbol} <span>{page.name}</span>
+                  {page.asset.symbol} <span>{page.asset.name}</span>
                 </h2>
                 <p>
-                  {page.pair} • {page.venue}
+                  {page.asset.pair} | {page.asset.venue}
                 </p>
               </div>
               <div className="price-block">
-                <strong>{page.spotPrice}</strong>
+                <strong>{page.primaryPrice.displayValue}</strong>
                 <span className={trendClass}>
-                  {page.change24h >= 0 ? "+" : ""}
-                  {page.change24h.toFixed(2)}% • {page.range24h}
+                  {page.primaryPrice.changePercent >= 0 ? "+" : ""}
+                  {page.primaryPrice.changePercent.toFixed(2)}% | {page.primaryPrice.rangeDisplay}
                 </span>
               </div>
             </div>
@@ -77,8 +79,7 @@ function App() {
                 <span className="eyebrow">Chart placeholder</span>
                 <h3>Zone chart principale</h3>
                 <p>
-                  Le shell affiche deja une lecture visuelle finance orientee actif, sans aucune
-                  source live.
+                  {page.primaryPrice.context}
                 </p>
               </div>
               <div className="chart-stage">
@@ -100,7 +101,7 @@ function App() {
                 <div className="chart-meta chart-meta-bottom">
                   <span>${geometry.min.toLocaleString("en-US")}</span>
                   <div className="chart-labels">
-                    {page.chart.map((point) => (
+                    {page.timeSeries.points.map((point) => (
                       <span key={point.label}>{point.label}</span>
                     ))}
                   </div>
@@ -117,7 +118,7 @@ function App() {
               </div>
             </div>
             <div className="metrics-grid">
-              {page.metrics.map((metric) => (
+              {page.keyMetrics.map((metric) => (
                 <section key={metric.label} className="metric-card">
                   <span>{metric.label}</span>
                   <strong>{metric.value}</strong>
@@ -130,8 +131,8 @@ function App() {
           <div className="content-grid">
             <article className="panel">
               <span className="eyebrow">Narrative placeholder</span>
-              <h3>Resume / narratif</h3>
-              <p className="lead-copy">{page.summary}</p>
+              <h3>{page.summary.title}</h3>
+              <p className="lead-copy">{page.summary.body}</p>
             </article>
 
             <article className="panel">
@@ -158,11 +159,18 @@ function App() {
             modules d&apos;analyse.
           </p>
           <div className="sidebar-stack">
-            {page.sidebar.map((item) => (
-              <section key={item.label} className="sidebar-card">
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-                <p>{item.detail}</p>
+            {page.sidebar.map((section) => (
+              <section key={section.title} className="sidebar-section">
+                <span className="sidebar-section-title">{section.title}</span>
+                <div className="sidebar-stack">
+                  {section.items.map((item) => (
+                    <section key={item.label} className="sidebar-card">
+                      <span>{item.label}</span>
+                      <strong>{item.value}</strong>
+                      <p>{item.detail}</p>
+                    </section>
+                  ))}
+                </div>
               </section>
             ))}
           </div>
