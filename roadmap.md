@@ -178,5 +178,3 @@ Voici un résumé technique réutilisable dans un nouveau chat Codex.
 - Tauri natif pas encore lançable car Rust/Cargo manque
 - Branche de travail moderne : `feat/desktop-shell-tauri`
 - Prochaine étape : connecter réellement le frontend au backend Java via `AssetPagePayload`
-
-Si tu veux, je peux aussi te faire une version encore plus compacte “prompt de reprise Codex” prête à copier-coller dans un nouveau chat.
