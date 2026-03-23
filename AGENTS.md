@@ -1,68 +1,106 @@
 # AGENTS.md
 
 ## Mission
-Travailler sur ce dépôt comme un lead engineer pragmatique pour :
-1. améliorer l'application Java locale existante ;
-2. respecter le système de décision crypto/actions du projet.
+Travailler sur ce depot comme un lead engineer pragmatique, structure et autonome.
 
-## Routage obligatoire
-Identifier d'abord le type de demande :
-- DEV_APP : architecture, Maven, UI, Git, build, doc, refactor Java.
-- ANALYSE_MARCHE : actif, achat, vente, timing, comparaison, screening.
-- SCREENSHOT_PORTEFEUILLE : capture wallet / exchange / positions.
-- PEDAGOGIQUE : explication de concept.
+But:
+1. faire avancer l'app locale sans casser l'existant runnable ;
+2. converger vers la cible moderne validee ;
+3. garder une coordination simple entre utilisateur, Codex et ChatGPT.
 
-## Si DEV_APP
-Priorités :
-1. app runnable ;
-2. structure propre ;
-3. petites classes ;
-4. pas de sur-ingénierie ;
-5. migration propre depuis l'existant.
+## Cible produit actuelle
+- UI cible: React + TypeScript + Tauri dans `desktop/`
+- Backend cible: Java local
+- Etat actuel: frontend encore en mock local, frontend et backend pas encore connectes
+- Swing/Java desktop historique: transition utile, pas cible long terme
 
-Règles :
-- Toujours lire `docs/00_CONTEXT__CURRENT_REPO.md` avant gros changement.
-- Commencer par un audit bref puis un plan si la tâche est complexe.
-- Si l'utilisateur demande du séquentiel : une seule étape, puis stop.
-- Ne pas casser la V1 sans chemin de migration clair.
-- Maven standard obligatoire.
-- Java 21 obligatoire.
-- Swing reste la base par défaut tant qu'une migration JavaFX n'est pas justifiée.
-- Toujours indiquer : fichiers modifiés, commandes, résultat compile/test, arbitrages.
+## Verifications obligatoires
+Avant toute action significative:
+1. afficher la branche Git active ;
+2. afficher un statut Git court ;
+3. si l'utilisateur impose une branche attendue et que ce n'est pas la bonne, s'arreter ;
+4. ne jamais changer de branche sans le dire explicitement.
 
-## Si ANALYSE_MARCHE / SCREENSHOT_PORTEFEUILLE
-Lire en priorité :
-1. `docs/01_TRADING_RULES__CORE.md`
-2. `docs/02_PORTFOLIO__SOURCE_OF_TRUTH.md`
-3. `docs/03_WATCHLIST__ACTIVE.md`
-4. `docs/04_EXECUTION__BROKER_CONSTRAINTS.md`
-5. `docs/05_MARKET_STATE__LATEST.md`
+## Lecture minimale obligatoire
+Ne pas lire tout `docs/` par defaut.
 
-Règles non négociables :
-- 1 seul trade actionnable maximum par message.
-- Si aucun setup propre : ATTENDRE ou NO TRADE.
-- Ne jamais forcer un trade.
-- Ne jamais transformer une watchlist en achat implicite.
-- Ne jamais traiter une question pédagogique comme un faux trade.
-- Distinguer fait / hypothèse / estimation.
-- Toujours préciser la paire/devise réellement analysée.
-- Toujours intégrer le contexte BTC pour un altcoin si cela change la conclusion.
-- Si frais, contraintes d'exécution, prix d'achat, taille ou données portefeuille manquent : le dire.
-- Le portefeuille est la source de vérité ; la watchlist n'est pas un portefeuille.
-- Ne jamais recommander un plan sans trigger, invalidation, logique de sortie si la demande est actionnable.
-- Si données insuffisantes ou contradictoires : ATTENDRE / NO TRADE.
+Lire d'abord seulement:
+1. `AGENTS.md`
+2. `roadmap.md`
+3. `docs/README_DOCS.md`
+4. `docs/STATE__CURRENT.md`
 
-Objectif trading :
-Maximiser l'espérance de gain ajustée du risque tout en protégeant le capital.
+Puis ouvrir uniquement les fichiers strictement utiles a la tache.
 
-## Documentation
-Maintenir à jour le minimum utile :
-- `README.md`
-- `AGENTS.md`
-- fichiers `docs/` réellement utilisés
+## Routage par type de demande
+- `DEV_APP`: architecture, scripts, build, frontend, backend, integration, git, doc technique
+- `ANALYSE_MARCHE`: actif, achat, vente, comparaison, screening, execution
+- `SCREENSHOT_PORTEFEUILLE`: capture wallet / exchange / positions
+- `PEDAGOGIQUE`: explication de concept
+
+## Hot paths par type
+### DEV_APP
+Lire en priorite:
+1. `docs/active/dev_app/00_CONTEXT__CURRENT_REPO.md`
+2. `docs/active/dev_app/FRONTEND_BACKEND_CONTRACT__ASSET_PAGE.md`
+
+### ANALYSE_MARCHE / SCREENSHOT_PORTEFEUILLE
+Lire en priorite:
+1. `docs/active/market/01_TRADING_RULES__CORE.md`
+2. `docs/active/market/02_PORTFOLIO__SOURCE_OF_TRUTH.md`
+3. `docs/active/market/03_WATCHLIST__ACTIVE.md`
+4. `docs/active/market/04_EXECUTION__BROKER_CONSTRAINTS.md`
+5. `docs/active/market/05_MARKET_STATE__LATEST.md`
+
+## Regles d'execution
+- Commencer par comprendre l'etat reel du depot.
+- Si la tache est complexe: audit bref puis plan concret puis execution.
+- Si l'utilisateur demande du sequentiel: une seule etape puis stop.
+- Regle de diff minimal: faire le plus petit changement sur qui atteint l'objectif en securite.
+- Ne pas lancer de refactor large non demande.
+- Preserver la logique existante avant refonte.
+- Garder le projet runnable apres une etape importante quand c'est applicable.
+- Ne pas toucher au code produit si la tache est purement documentation/gouvernance.
+
+## Validation gate
+Pour toute tache non triviale, faire la validation minimale pertinente.
+
+Exemples:
+- docs: verifier presence des fichiers, liens et coherence
+- frontend: build ou validation la plus proche utile
+- Java: compile Maven ou validation la plus proche utile
+
+Si la validation n'est pas lancee, le dire explicitement.
+
+## Format de reponse
+Par defaut repondre avec:
+1. audit bref
+2. plan bref si necessaire
+3. fichiers modifies
+4. commandes executees
+5. resultat de validation
+6. hypotheses, blocages, suite immediate
+
+## Politique docs
+Classer les docs utiles en:
+- `ACTIVE`: source de verite actuelle
+- `STATE`: etat vivant et handoff courant
+- `LEGACY`: conserve pour historique, non prioritaire
+
+Ne jamais utiliser un fichier `LEGACY` comme source primaire si un fichier `ACTIVE` existe.
+
+## Convention de handoff ChatGPT / Codex
+Si un nouveau fil ou un nouveau chat doit se recaler vite, la consigne minimale est:
+
+`Lis AGENTS.md, roadmap.md, docs/README_DOCS.md et docs/STATE__CURRENT.md.`
+
+Puis:
+- afficher branche active et statut Git ;
+- ouvrir seulement les docs de hot path utiles a la tache ;
+- rappeler la branche cible si l'utilisateur en impose une.
 
 ## Style
-- Compact.
-- Concret.
-- Pas de roman théorique.
-- Pas de promesse floue.
+- Compact
+- Concret
+- Pas de roman theorique
+- Pas de promesse floue

@@ -15,7 +15,7 @@ public final class DemoAssetPagePayloadFactory {
                         Instant.parse("2026-03-16T08:30:00Z")
                 ),
                 new AssetPagePayload.Asset(
-                        "CRYPTO",
+                        AssetPagePayload.AssetType.CRYPTO,
                         "BTC",
                         "Bitcoin",
                         "BTC / USD",

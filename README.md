@@ -112,7 +112,7 @@ Pour compiler et packager le jar:
 mvn -q -DskipTests package
 ```
 
-Le jar lanceable est genere ici:
+Le jar lancable est genere ici:
 
 ```text
 target\local-data-brief.jar
@@ -129,6 +129,15 @@ target\local-data-brief.jar
 ## Sources publiques
 
 - FRED CSV: `https://fred.stlouisfed.org/graph/fredgraph.csv?id=...`
+
+## Documentation
+
+La documentation est rangee par type dans `docs/` :
+
+- `docs/active/` : source de verite actuelle
+- `docs/reference/` : contexte secondaire
+- `docs/process/` : mode de travail et bootstrap Codex
+- `docs/ui/` : direction UI, captures et inspirations design
 
 ## Suite possible
 

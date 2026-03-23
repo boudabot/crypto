@@ -4,8 +4,10 @@ export type PayloadMeta = {
   asOf: string;
 };
 
+export type AssetType = "CRYPTO" | "EQUITY" | "MACRO";
+
 export type AssetInfo = {
-  type: "CRYPTO" | "EQUITY" | "MACRO";
+  type: AssetType;
   symbol: string;
   name: string;
   pair: string;
@@ -38,7 +40,7 @@ export type MetricItem = {
   detail: string;
 };
 
-export type SummaryBlock = {
+export type Summary = {
   title: string;
   body: string;
 };
@@ -49,9 +51,15 @@ export type EventItem = {
   detail: string;
 };
 
+export type SidebarItem = {
+  label: string;
+  value: string;
+  detail: string;
+};
+
 export type SidebarSection = {
   title: string;
-  items: MetricItem[];
+  items: SidebarItem[];
 };
 
 export type AssetPagePayload = {
@@ -60,7 +68,7 @@ export type AssetPagePayload = {
   primaryPrice: PrimaryPrice;
   timeSeries: TimeSeries;
   keyMetrics: MetricItem[];
-  summary: SummaryBlock;
+  summary: Summary;
   events: EventItem[];
   sidebar: SidebarSection[];
 };

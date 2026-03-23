@@ -22,7 +22,7 @@ public record AssetPagePayload(
     }
 
     public record Asset(
-            String type,
+            AssetType type,
             String symbol,
             String name,
             String pair,
@@ -84,5 +84,11 @@ public record AssetPagePayload(
             String value,
             String detail
     ) {
+    }
+
+    public enum AssetType {
+        CRYPTO,
+        EQUITY,
+        MACRO
     }
 }
